@@ -1,0 +1,149 @@
+🧠 Phase 4: ML Models - Problem Statements
+Problem 1: Risk Prediction (XGBoost)
+┌─────────────────────────────────────────────────────────────────┐
+│  GOAL: Predict how RISKY a flight/operation will be (0-100)    │
+├─────────────────────────────────────────────────────────────────┤
+│  INPUT FEATURES:                                                │
+│  ├── Weather: visibility, wind_speed, weather_risk_score       │
+│  ├── Aircraft: type, age, maintenance status                   │
+│  ├── Crew: duty_hours, rest_hours, fatigue_index               │
+│  ├── Schedule: turnaround_time, delays                         │
+│  └── Historical: past incidents at this airport/route          │
+│                                                                 │
+│  OUTPUT:                                                        │
+│  └── risk_score: 0-100 (higher = more dangerous)               │
+│                                                                 │
+│  MODEL: XGBoost Regressor                                       │
+│  WHY: Good with tabular data, handles missing values            │
+└─────────────────────────────────────────────────────────────────┘
+Your Task:
+
+Load the transformed features from Parquet files
+Create training features (X) and target (y = injury_score or severity_code)
+Train XGBoost model
+Evaluate with RMSE, R²
+Save model to models/ folder
+Problem 2: Severity Classification (LightGBM)
+┌─────────────────────────────────────────────────────────────────┐
+│  GOAL: Classify severity into 4 categories                     │
+├─────────────────────────────────────────────────────────────────┤
+│  INPUT: Same features as Problem 1                             │
+│                                                                 │
+│  OUTPUT (multi-class):                                          │
+│  ├── 0 = NONE     (no injuries)                                │
+│  ├── 1 = MINOR    (minor injuries)                             │
+│  ├── 2 = SERIOUS  (serious injuries)                           │
+│  └── 3 = FATAL    (fatalities)                                 │
+│                                                                 │
+│  MODEL: LightGBM Classifier                                     │
+│  WHY: Fast, handles imbalanced classes well                     │
+│                                                                 │
+│  CHALLENGE: Class imbalance!                                    │
+│  ├── NONE:    20,000+ records                                  │
+│  ├── FATAL:   ~6,000 records                                   │
+│  └── Need: class_weight or SMOTE                               │
+└─────────────────────────────────────────────────────────────────┘
+Your Task:
+
+Encode severity as 0,1,2,3
+Handle class imbalance (use class_weight='balanced')
+Train LightGBM classifier
+Evaluate with confusion matrix, F1-score
+Save model
+Problem 3: Anomaly Detection
+┌─────────────────────────────────────────────────────────────────┐
+│  GOAL: Find unusual/suspicious operational patterns            │
+├─────────────────────────────────────────────────────────────────┤
+│  USE CASE: "This flight's risk factors look abnormal!"         │
+│                                                                 │
+│  INPUT: Operational features                                    │
+│  ├── crew_fatigue_index                                        │
+│  ├── maintenance_risk                                          │
+│  ├── schedule_deviation                                        │
+│  └── weather_risk                                              │
+│                                                                 │
+│  MODEL OPTIONS:                                                 │
+│  ├── Isolation Forest (unsupervised)                           │
+│  ├── Local Outlier Factor                                      │
+│  └── One-Class SVM                                             │
+│                                                                 │
+│  OUTPUT:                                                        │
+│  ├── is_anomaly: True/False                                    │
+│  └── anomaly_score: How abnormal (-1 to 0)                     │
+└─────────────────────────────────────────────────────────────────┘
+Your Task:
+
+Use Isolation Forest from sklearn
+Fit on operational data features
+Predict anomalies
+Find the weirdest 5% of operations
+Problem 4: SHAP Explainability
+┌─────────────────────────────────────────────────────────────────┐
+│  GOAL: Explain WHY a prediction was made                       │
+├─────────────────────────────────────────────────────────────────┤
+│  QUESTION: "Why is this flight rated HIGH RISK?"               │
+│                                                                 │
+│  SHAP VALUES tell you:                                          │
+│  ├── "wind_speed=30kt contributed +15 to risk"                 │
+│  ├── "pilot_experience=5000hrs contributed -10 to risk"        │
+│  └── "visibility=500m contributed +25 to risk"                 │
+│                                                                 │
+│  VISUALIZATIONS:                                                │
+│  ├── Summary plot (which features matter most globally)        │
+│  ├── Waterfall plot (explain single prediction)                │
+│  └── Force plot (interactive explanation)                      │
+└─────────────────────────────────────────────────────────────────┘
+Your Task:
+
+Install: pip install shap
+Load trained XGBoost model
+Create SHAP explainer
+Generate plots
+Problem 5: Recommendation Engine
+┌─────────────────────────────────────────────────────────────────┐
+│  GOAL: Generate actionable safety recommendations              │
+├─────────────────────────────────────────────────────────────────┤
+│  INPUT: Risk prediction + SHAP values                          │
+│                                                                 │
+│  LOGIC:                                                         │
+│  IF weather_risk > 70:                                         │
+│     → "Delay flight until weather improves"                    │
+│  IF crew_fatigue > 80:                                         │
+│     → "Replace crew with well-rested pilots"                   │
+│  IF maintenance_overdue = True:                                │
+│     → "Complete maintenance before flight"                     │
+│                                                                 │
+│  OUTPUT:                                                        │
+│  ├── Recommendation title                                      │
+│  ├── Expected risk reduction (%)                               │
+│  ├── Priority (LOW/MEDIUM/HIGH/CRITICAL)                       │
+│  └── Implementation cost ($-$$$$)                              │
+└─────────────────────────────────────────────────────────────────┘
+📂 Where to Put Your Code
+aerorisk/
+├── notebooks/
+│   └── feature_engineering.ipynb    ← Start here! Explore data
+│
+├── src/
+│   └── models/
+│       ├── risk_predictor.py        ← XGBoost model
+│       ├── severity_classifier.py   ← LightGBM model
+│       ├── anomaly_detector.py      ← Isolation Forest
+│       └── explainer.py             ← SHAP wrapper
+│
+└── models/
+    ├── xgboost_risk_v1.pkl          ← Saved model files
+    └── lightgbm_severity_v1.pkl
+🚀 Getting Started
+I suggest you start with a Jupyter Notebook to explore the data:
+
+python
+# Load your transformed features
+import pandas as pd
+# These files were created by run_etl.py
+incidents = pd.read_parquet('data/processed/incident_features_latest.parquet')
+operations = pd.read_parquet('data/processed/operational_features_latest.parquet')
+# Look at what you have
+print(incidents.columns.tolist())
+print(incidents.shape)
+print(incidents['severity'].value_counts())
