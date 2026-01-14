@@ -1,0 +1,113 @@
+version: '3.8'
+
+# ============================================
+# AeroRisk - Docker Compose Configuration
+# ============================================
+# Run: docker-compose up -d
+# Stop: docker-compose down
+# Logs: docker-compose logs -f
+
+services:
+  # ==========================================
+  # PostgreSQL Database
+  # ==========================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: aerorisk-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-aerorisk}
+      POSTGRES_USER: ${POSTGRES_USER:-aerorisk}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aerorisk_secure_password_2024}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aerorisk} -d ${POSTGRES_DB:-aerorisk}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aerorisk-network
+
+  # ==========================================
+  # Adminer - Database Management UI
+  # ==========================================
+  adminer:
+    image: adminer:latest
+    container_name: aerorisk-adminer
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN: pepa-linha-dark
+    networks:
+      - aerorisk-network
+
+  # ==========================================
+  # FastAPI Backend (uncomment when ready)
+  # ==========================================
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: aerorisk-api
+  #   restart: unless-stopped
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   ports:
+  #     - "${API_PORT:-8000}:8000"
+  #   environment:
+  #     - DATABASE_URL=postgresql://${POSTGRES_USER:-aerorisk}:${POSTGRES_PASSWORD:-aerorisk_secure_password_2024}@postgres:5432/${POSTGRES_DB:-aerorisk}
+  #     - API_HOST=0.0.0.0
+  #     - API_PORT=8000
+  #   volumes:
+  #     - ./src:/app/src:ro
+  #     - ./models:/app/models
+  #     - ./data:/app/data
+  #   networks:
+  #     - aerorisk-network
+
+  # ==========================================
+  # Streamlit Dashboard (uncomment when ready)
+  # ==========================================
+  # dashboard:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.dashboard
+  #   container_name: aerorisk-dashboard
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - api
+  #   ports:
+  #     - "${STREAMLIT_PORT:-8501}:8501"
+  #   environment:
+  #     - API_URL=http://api:8000
+  #   volumes:
+  #     - ./dashboard:/app/dashboard:ro
+  #   networks:
+  #     - aerorisk-network
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  aerorisk-network:
+    driver: bridge
+    name: aerorisk-network
+
+# ==========================================
+# Volumes
+# ==========================================
+volumes:
+  postgres_data:
+    driver: local
+    name: aerorisk-postgres-data

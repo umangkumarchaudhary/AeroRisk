@@ -1,0 +1,140 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aerorisk"
+version = "1.0.0"
+description = "Predictive Safety Risk Analytics Platform - SMS-aligned safety analytics for aviation"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [
+    {name = "AeroRisk Team"}
+]
+keywords = ["aviation", "safety", "predictive-analytics", "sms", "risk-management"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    # Core Data Processing
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+    "polars>=0.20.0",
+    
+    # Database
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.9",
+    "alembic>=1.13.0",
+    
+    # Machine Learning
+    "scikit-learn>=1.4.0",
+    "xgboost>=2.0.0",
+    "lightgbm>=4.2.0",
+    "shap>=0.44.0",
+    
+    # API Framework
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    
+    # Dashboard
+    "streamlit>=1.30.0",
+    "plotly>=5.18.0",
+    "altair>=5.2.0",
+    
+    # Pipeline Orchestration
+    "prefect>=2.14.0",
+    
+    # HTTP & API Clients
+    "httpx>=0.26.0",
+    "requests>=2.31.0",
+    
+    # Utilities
+    "python-dotenv>=1.0.0",
+    "loguru>=0.7.2",
+    "python-multipart>=0.0.6",
+    "pyyaml>=6.0.1",
+    
+    # Date/Time
+    "python-dateutil>=2.8.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.23.0",
+    "httpx>=0.26.0",
+    "black>=24.1.0",
+    "ruff>=0.1.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+notebooks = [
+    "jupyter>=1.0.0",
+    "jupyterlab>=4.0.0",
+    "ipykernel>=6.28.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/aerorisk"
+Documentation = "https://github.com/yourusername/aerorisk#readme"
+Repository = "https://github.com/yourusername/aerorisk"
+
+[project.scripts]
+aerorisk-api = "src.api.main:run_server"
+aerorisk-ingest = "src.ingestion.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "dashboard*", "pipelines*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | migrations
+)/
+'''
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+exclude = [".venv", "migrations"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --cov=src --cov-report=term-missing"
+asyncio_mode = "auto"
