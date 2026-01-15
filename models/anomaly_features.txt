@@ -1,0 +1,6 @@
+operational_risk_score
+fatigue_risk
+maintenance_risk
+schedule_risk
+crew_duty_hours
+crew_rest_hours

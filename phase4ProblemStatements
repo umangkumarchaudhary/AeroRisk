@@ -23,6 +23,13 @@ Create training features (X) and target (y = injury_score or severity_code)
 Train XGBoost model
 Evaluate with RMSE, R²
 Save model to models/ folder
+
+*things left 
+Add more weather features from weather_data JSON
+Add aircraft type encoding
+Add location-based features
+
+
 Problem 2: Severity Classification (LightGBM)
 ┌─────────────────────────────────────────────────────────────────┐
 │  GOAL: Classify severity into 4 categories                     │
@@ -50,6 +57,7 @@ Handle class imbalance (use class_weight='balanced')
 Train LightGBM classifier
 Evaluate with confusion matrix, F1-score
 Save model
+
 Problem 3: Anomaly Detection
 ┌─────────────────────────────────────────────────────────────────┐
 │  GOAL: Find unusual/suspicious operational patterns            │

@@ -1,0 +1,7 @@
+feature,mean_abs_shap
+total_injuries,3.0701096
+severity_code,1.6376482
+injury_rate,0.8470553
+is_us,0.1041681
+is_weekend,0.036691163
+has_coordinates,0.03153533

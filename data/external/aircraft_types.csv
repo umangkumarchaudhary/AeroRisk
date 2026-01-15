@@ -1,0 +1,25 @@
+make,model,category,engine_type,engines,seats,mtow_lbs,risk_factor,base_risk_score
+CESSNA,172,Airplane,Piston,1,4,2550,0.6,60.0
+CESSNA,182,Airplane,Piston,1,4,3100,0.55,55.00000000000001
+CESSNA,152,Airplane,Piston,1,2,1670,0.65,65.0
+PIPER,PA-28,Airplane,Piston,1,4,2550,0.6,60.0
+PIPER,PA-32,Airplane,Piston,1,6,3600,0.5,50.0
+BEECHCRAFT,BONANZA,Airplane,Piston,1,6,3650,0.45,45.0
+MOONEY,M20,Airplane,Piston,1,4,2900,0.55,55.00000000000001
+CESSNA,310,Airplane,Piston,2,6,5500,0.4,40.0
+PIPER,PA-34,Airplane,Piston,2,6,4750,0.45,45.0
+BEECHCRAFT,BARON,Airplane,Piston,2,6,5500,0.4,40.0
+CESSNA,CARAVAN,Airplane,Turboprop,1,14,8750,0.3,30.0
+BEECHCRAFT,KING AIR,Airplane,Turboprop,2,12,12500,0.25,25.0
+PILATUS,PC-12,Airplane,Turboprop,1,10,10450,0.25,25.0
+CESSNA,CITATION,Airplane,Jet,2,10,15100,0.2,20.0
+LEARJET,45,Airplane,Jet,2,9,21500,0.2,20.0
+GULFSTREAM,G550,Airplane,Jet,2,18,91000,0.15,15.0
+BOEING,737,Airplane,Jet,2,180,174200,0.1,10.0
+BOEING,777,Airplane,Jet,2,350,775000,0.08,8.0
+AIRBUS,A320,Airplane,Jet,2,180,172000,0.1,10.0
+AIRBUS,A380,Airplane,Jet,4,525,1268000,0.05,5.0
+ROBINSON,R44,Helicopter,Piston,1,4,2500,0.7,70.0
+ROBINSON,R22,Helicopter,Piston,1,2,1370,0.75,75.0
+BELL,206,Helicopter,Turboshaft,1,5,3350,0.5,50.0
+SIKORSKY,S-76,Helicopter,Turboshaft,2,12,13000,0.35,35.0

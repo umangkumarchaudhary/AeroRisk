@@ -1,1 +1,4 @@
-"""AeroRisk API Module"""
+"""
+AeroRisk API Module
+"""
+from src.api.schemas import *

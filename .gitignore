@@ -1,8 +1,7 @@
-# AeroRisk - Git Ignore
+# AeroRisk - Aviation Safety Analytics Platform
+# =============================================
 
-# ============================================
 # Python
-# ============================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -24,119 +23,54 @@ wheels/
 .installed.cfg
 *.egg
 
-# ============================================
-# Virtual Environments
-# ============================================
-.env
-.venv
-env/
+# Virtual Environment
 venv/
 ENV/
-env.bak/
-venv.bak/
+env/
+.venv/
 
-# ============================================
 # IDE
-# ============================================
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
-.project
-.pydevproject
-.settings/
 
-# ============================================
-# Jupyter Notebooks
-# ============================================
-.ipynb_checkpoints/
-*.ipynb_checkpoints
-
-# ============================================
-# Testing
-# ============================================
-.coverage
-.pytest_cache/
-htmlcov/
-.tox/
-.nox/
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-
-# ============================================
-# MyPy
-# ============================================
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# ============================================
-# Logs
-# ============================================
-*.log
-logs/
-
-# ============================================
-# Data (don't commit large data files)
-# ============================================
-data/raw/*
-data/processed/*
-data/external/*
-!data/raw/.gitkeep
-!data/processed/.gitkeep
-!data/external/.gitkeep
-
-# ============================================
-# Models (don't commit model files)
-# ============================================
-models/*.pkl
-models/*.joblib
-models/*.h5
-models/*.pt
-models/*.pth
-!models/.gitkeep
-
-# ============================================
-# Secrets & Environment
-# ============================================
+# Environment
 .env
 .env.local
 .env.*.local
-*.pem
-*.key
-secrets/
+*.env
 
-# ============================================
-# Docker
-# ============================================
-.docker/
+# Data files (EXCLUDED - TOO LARGE FOR GITHUB)
+data/raw/
+data/processed/
+data/external/*.parquet
+*.xls
+*.xlsx
+*.parquet
 
-# ============================================
-# OS Files
-# ============================================
+# Models (EXCLUDED - TOO LARGE FOR GITHUB)
+models/*.pkl
+models/*.joblib
+models/registry/
+
+# Logs
+logs/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
-# ============================================
-# Temporary Files
-# ============================================
-tmp/
-temp/
-*.tmp
-*.temp
-*.bak
+# Reports (generated)
+reports/shap/*.png
+reports/recommendations/*.txt
+reports/recommendations/*.json
 
-# ============================================
 # Database
-# ============================================
 *.db
 *.sqlite
-*.sqlite3

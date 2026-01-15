@@ -1,0 +1,6 @@
+is_weekend
+severity_code
+total_injuries
+injury_rate
+has_coordinates
+is_us
