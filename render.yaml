@@ -1,13 +1,10 @@
 # Render Deployment Configuration
 # =================================
-# Deploy FastAPI backend to Render
 
 services:
-  # FastAPI Backend Service
   - type: web
     name: aerorisk-api
-    env: python
-    region: oregon
+    runtime: python
     plan: free
     branch: main
     buildCommand: pip install -r requirements.txt
@@ -15,8 +12,4 @@ services:
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
-        value: "3.11"
-      - key: DATABASE_URL
-        sync: false  # Set this in Render dashboard
-      - key: ENVIRONMENT
-        value: production
+        value: 3.11.7
