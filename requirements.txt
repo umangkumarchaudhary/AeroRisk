@@ -6,6 +6,9 @@ fastapi==0.115.0
 uvicorn[standard]==0.30.0
 python-multipart==0.0.6
 
+# Hugging Face (for model download)
+huggingface_hub==0.20.0
+
 # Data Processing
 pandas==2.2.0
 numpy==1.26.0

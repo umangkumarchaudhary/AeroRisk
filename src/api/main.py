@@ -57,14 +57,54 @@ class ModelStore:
     
     @classmethod
     def load_models(cls):
-        """Load all ML models."""
+        """Load all ML models, downloading from Hugging Face if not found locally."""
         models_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'models')
+        os.makedirs(models_dir, exist_ok=True)
         
+        # Try to import Hugging Face model loader
+        try:
+            from src.utils.model_loader import load_model, load_features, ensure_models_downloaded
+            
+            # Download models if not present
+            logger.info("Checking for models (will download from Hugging Face if needed)...")
+            result = ensure_models_downloaded()
+            logger.info(f"Models ready: {result.get('success', [])}")
+            
+            # Load Risk Predictor
+            cls.risk_predictor = load_model("risk_predictor")
+            if cls.risk_predictor:
+                logger.info("Loaded risk predictor model")
+            
+            # Load Risk Features
+            cls.risk_features = load_features("risk_features")
+            
+            # Load Severity Classifier
+            cls.severity_classifier = load_model("severity_classifier")
+            if cls.severity_classifier:
+                logger.info("Loaded severity classifier model")
+            
+            # Load Anomaly Detector
+            cls.anomaly_detector = load_model("anomaly_detector")
+            if cls.anomaly_detector:
+                logger.info("Loaded anomaly detector model")
+            
+            # Load Anomaly Scaler
+            cls.anomaly_scaler = load_model("anomaly_scaler")
+            if cls.anomaly_scaler:
+                logger.info("Loaded anomaly scaler")
+                
+        except ImportError:
+            logger.warning("Hugging Face model loader not available, loading from local files only")
+            cls._load_local_models(models_dir)
+    
+    @classmethod
+    def _load_local_models(cls, models_dir):
+        """Fallback: Load models from local directory."""
         # Risk Predictor
         risk_path = os.path.join(models_dir, 'xgboost_risk_predictor_v1.pkl')
         if os.path.exists(risk_path):
             cls.risk_predictor = joblib.load(risk_path)
-            logger.info("Loaded risk predictor model")
+            logger.info("Loaded risk predictor model (local)")
         
         # Load risk features
         features_path = os.path.join(models_dir, 'xgboost_risk_features.txt')
@@ -76,19 +116,19 @@ class ModelStore:
         severity_path = os.path.join(models_dir, 'lightgbm_severity_classifier_v1.pkl')
         if os.path.exists(severity_path):
             cls.severity_classifier = joblib.load(severity_path)
-            logger.info("Loaded severity classifier model")
+            logger.info("Loaded severity classifier model (local)")
         
         # Anomaly Detector
         anomaly_path = os.path.join(models_dir, 'isolation_forest_anomaly_v1.pkl')
         if os.path.exists(anomaly_path):
             cls.anomaly_detector = joblib.load(anomaly_path)
-            logger.info("Loaded anomaly detector model")
+            logger.info("Loaded anomaly detector model (local)")
         
         # Anomaly Scaler
         scaler_path = os.path.join(models_dir, 'anomaly_scaler.pkl')
         if os.path.exists(scaler_path):
             cls.anomaly_scaler = joblib.load(scaler_path)
-            logger.info("Loaded anomaly scaler")
+            logger.info("Loaded anomaly scaler (local)")
 
 
 # ============================================
